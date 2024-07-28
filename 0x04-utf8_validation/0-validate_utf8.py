@@ -3,32 +3,23 @@
 validUTF8
 """
 
-
 def validUTF8(data):
     """Determines if a given data set represents a valid UTF-8 encoding"""
     count = 0
 
     for x in data:
-
-        if 191 >= x >= 128:
-
-            if not count:
-                return False
-
-            count -= 1
-        else:
-            if count:
-                return False
-
-            if x < 128:
-                continue
-            elif x < 224:
+        if count == 0:
+            if (x >> 5) == 0b110:
                 count = 1
-            elif x < 240:
+            elif (x >> 4) == 0b1110:
                 count = 2
-            elif x < 248:
+            elif (x >> 3) == 0b11110:
                 count = 3
-            else:
+            elif (x >> 7):
                 return False
+        else:
+            if (x >> 6) != 0b10:
+                return False
+            count -= 1
 
     return count == 0
